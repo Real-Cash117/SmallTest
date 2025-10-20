@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure, adminProcedure } from "~/server/api/trpc";
-import { JSONDatabase } from "~/lib/database";
+import { db } from "~/lib/database/sqlite";
 
 export const rankingItemRouter = createTRPCRouter({
   // Admin procedures
@@ -14,7 +14,6 @@ export const rankingItemRouter = createTRPCRouter({
       order: z.number().default(0),
     }))
     .mutation(async ({ input }) => {
-      const db = JSONDatabase.getInstance();
       return await db.createRankingItem({
         ...input,
         averageRating: 0,
@@ -27,17 +26,14 @@ export const rankingItemRouter = createTRPCRouter({
   getByCategory: publicProcedure
     .input(z.object({ categoryId: z.string() }))
     .query(async ({ input }) => {
-      const db = JSONDatabase.getInstance();
       return await db.getItemsByCategory(input.categoryId);
     }),
 
   getAll: adminProcedure.query(async () => {
-    const db = JSONDatabase.getInstance();
     return await db.getAllItems();
   }),
 
   getStats: adminProcedure.query(async () => {
-    const db = JSONDatabase.getInstance();
     return await db.getItemStats();
   }),
 
@@ -53,7 +49,6 @@ export const rankingItemRouter = createTRPCRouter({
       order: z.number().optional(),
     }))
     .mutation(async ({ input }) => {
-      const db = JSONDatabase.getInstance();
       const { id, ...updates } = input;
       return await db.updateRankingItem(id, updates);
     }),
@@ -61,12 +56,10 @@ export const rankingItemRouter = createTRPCRouter({
   delete: adminProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
-      const db = JSONDatabase.getInstance();
       return await db.deleteRankingItem(input.id);
     }),
 
   getFeatured: publicProcedure.query(async () => {
-    const db = JSONDatabase.getInstance();
     return await db.getFeaturedItems();
   }),
 
@@ -80,7 +73,6 @@ export const rankingItemRouter = createTRPCRouter({
         throw new Error("Must be logged in to rate items");
       }
 
-      const db = JSONDatabase.getInstance();
       const user = await db.findUserByEmail(ctx.session.user.email);
       
       if (!user) {

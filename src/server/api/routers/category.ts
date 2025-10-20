@@ -1,10 +1,9 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure, adminProcedure } from "~/server/api/trpc";
-import { JSONDatabase } from "~/lib/database";
+import { db } from "~/lib/database/sqlite";
 
 export const categoryRouter = createTRPCRouter({
   getAll: publicProcedure.query(async () => {
-    const db = JSONDatabase.getInstance();
     return await db.getAllCategories();
   }),
 
@@ -15,7 +14,6 @@ export const categoryRouter = createTRPCRouter({
       color: z.string().default("blue"),
     }))
     .mutation(async ({ input }) => {
-      const db = JSONDatabase.getInstance();
       return await db.createCategory(input);
     }),
 
@@ -27,7 +25,6 @@ export const categoryRouter = createTRPCRouter({
       color: z.string().optional(),
     }))
     .mutation(async ({ input }) => {
-      const db = JSONDatabase.getInstance();
       const { id, ...updates } = input;
       return await db.updateCategory(id, updates);
     }),
@@ -35,7 +32,6 @@ export const categoryRouter = createTRPCRouter({
   delete: adminProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
-      const db = JSONDatabase.getInstance();
       return await db.deleteCategory(input.id);
     }),
 });

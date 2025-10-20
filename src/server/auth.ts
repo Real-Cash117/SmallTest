@@ -5,7 +5,7 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { JSONDatabase } from "~/lib/database";
+import { db } from "~/lib/database/sqlite";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -30,8 +30,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       if (!user.email) return false;
-
-      const db = JSONDatabase.getInstance();
 
       let existingUser = await db.findUserByEmail(user.email);
 
@@ -70,7 +68,6 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session }) {
       if (session.user?.email) {
-        const db = JSONDatabase.getInstance();
         const user = await db.findUserByEmail(session.user.email);
         if (user) {
           session.user.id = user.id;
@@ -80,7 +77,6 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async redirect({ url, baseUrl }) {
-      const db = JSONDatabase.getInstance();
       const token = new URL(url, baseUrl);
       if (token.pathname === '/admin' && token.searchParams.get('email')) {
         const user = await db.findUserByEmail(token.searchParams.get('email')!);
