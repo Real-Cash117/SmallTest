@@ -1,0 +1,2 @@
+# Favicon placeholder
+# In a real application, you would place your favicon.ico file here

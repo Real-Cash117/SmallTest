@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  nextjs-ranking-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXTAUTH_URL=http://localhost:3000
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    container_name: nextjs-ranking-app
+
+  nextjs-ranking-app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - NEXTAUTH_URL=http://localhost:3001
+      - PORT=3001
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+      - ./data:/app/data
+    restart: unless-stopped
+    container_name: nextjs-ranking-app-dev
+    profiles:
+      - dev
