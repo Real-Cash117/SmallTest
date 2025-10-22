@@ -1,55 +1,50 @@
 # Ranking System - Full-Stack Admin Project
 
-This is a comprehensive Next.js TypeScript ranking application with a complete admin system.
+This project is a completed Next.js TypeScript ranking application featuring a comprehensive admin dashboard and JSON-backed persistence.
 
 ## Project Overview
+- **Status:** ✅ Completed – production-ready full-stack implementation
+- **Frontend:** Next.js 14 App Router, TypeScript, Mantine UI
+- **Backend:** tRPC for type-safe APIs with JSON repository
+- **Database:** File-based JSON storage (`data/database.json`)
+- **Authentication:** NextAuth.js (Google OAuth)
+- **Infrastructure:** Docker Compose for development and production
 
-**Status: ✅ COMPLETED** - Full-stack ranking application with admin dashboard
+## Key Features Implemented
+- ⭐ Public 1–10 star ranking interface
+- 🔐 Secure Google OAuth authentication and role checks
+- 📊 Admin dashboard with charts and statistics
+- 🏷️ Category and ranking item management workflows
+- 👥 User role management (USER / ADMIN / SUPER_ADMIN)
+- 📝 Ratings moderation with instant aggregate recalculation
+- 🐳 Dockerized dev/prod environments
 
-### Architecture
-- **Frontend**: Next.js 14 App Router, TypeScript, Mantine UI
-- **Backend**: tRPC for type-safe APIs, Prisma ORM
-- **Database**: PostgreSQL with comprehensive schema
-- **Authentication**: NextAuth.js with Google OAuth
-- **Infrastructure**: Docker Compose with development/production environments
+## Data Schema
+- `users` – auth profiles with roles
+- `categories` – themed collections
+- `rankingItems` – rateable entities and aggregates
+- `ratings` – user scores
+- `accounts`, `sessions` – NextAuth persistence objects
 
-### Key Features Implemented
-- ⭐ Public ranking interface with star ratings
-- 🔐 Secure admin authentication system
-- 📊 Admin dashboard with statistics
-- 🏷️ Category and item management
-- 👥 User role management
-- 🐳 Full Docker containerization
-- 📝 Complete CRUD operations via tRPC
+## Admin System
+- Dashboard at `/admin` with live metrics
+- Role-based access control for all admin routes
+- Management views for categories, items, ratings, and users
+- Toast notifications on all mutations
 
-### Database Schema
-- **Users**: Authentication with role-based access (USER/ADMIN)
-- **Categories**: Themed organization for ranking items
-- **RankingItems**: Core items to be rated with metadata
-- **Ratings**: User ratings linked to items
+## Development Setup
+1. Configure `.env.local` using `.env.example`
+2. Install dependencies via `npm install`
+3. Run `npm run dev` (or Docker Compose)
+4. JSON database seeds populate on first run
+5. Promote newly created accounts to `SUPER_ADMIN` within the data file if needed
 
-### Admin System
-- Dashboard at `/admin` with overview statistics
-- Secure authentication via Google OAuth
-- Role-based access control
-- Management interfaces for items, categories, and users
-- Real-time statistics and analytics
-
-### Development Setup
-1. Environment configuration in `.env.local`
-2. Docker Compose for development and production
-3. Database migrations via Prisma
-4. Google OAuth setup for admin access
-
-### Project Structure Complete
-- ✅ Next.js App Router with TypeScript
-- ✅ Mantine UI component library integration
-- ✅ Prisma database schema and client
-- ✅ tRPC API routers for all entities
-- ✅ NextAuth.js authentication setup
-- ✅ Docker development and production environments
-- ✅ Admin dashboard UI components
-- ✅ Environment variable configuration
-- ✅ Comprehensive documentation
-
-This project demonstrates modern full-stack development practices with type safety, secure authentication, and professional UI components.
+## Project Structure Complete
+- ✅ Next.js 14 App Router + TypeScript
+- ✅ Mantine UI component system
+- ✅ tRPC routers for all entities
+- ✅ NextAuth.js Google OAuth integration
+- ✅ JSON repository data layer with aggregation helpers
+- ✅ Docker Compose dev/prod workflows
+- ✅ Admin dashboard and statistics UI
+- ✅ Environment variable validation and documentation
