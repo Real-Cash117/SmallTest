@@ -1,8 +1,14 @@
 # Ranking System - Full-Stack Admin Project
 
-This is a comprehensive Next.js TypeScript ranking application with a complete admin system.
+This project is a completed Next.js TypeScript ranking application featuring a comprehensive admin dashboard and JSON-backed persistence.
 
 ## Project Overview
+- **Status:** ✅ Completed – production-ready full-stack implementation
+- **Frontend:** Next.js 14 App Router, TypeScript, Mantine UI
+- **Backend:** tRPC for type-safe APIs with JSON repository
+- **Database:** File-based JSON storage (`data/database.json`)
+- **Authentication:** NextAuth.js (Google OAuth)
+- **Infrastructure:** Docker Compose for development and production
 
 **Status: ✅ COMPLETED** – Full-stack ranking application with admin dashboard
 
