@@ -1,27 +1,27 @@
 # Ranking System - Next.js TypeScript Application
 
-A full-stack ranking platform built with Next.js 14 (App Router), TypeScript, Mantine UI, and a JSON-backed data layer exposed through tRPC. It delivers a polished public rating experience plus an admin portal for managing categories, items, users, and ratings.
+A production-ready ranking platform built with Next.js 14 (App Router), TypeScript, Mantine UI, and tRPC. The app ships with a JSON persistence layer (`data/database.json`) and offers an optional SQLite backend powered by Kysely.
 
 ## Features
 
 ### Public
-- ⭐ Rate items on a 1–10 scale with instant averages
-- 📂 Browse items by category and featured highlights
-- 📱 Responsive Mantine UI layout
-- 🔔 Auth prompt when non-signed users attempt to rate
+- ⭐ 1–10 rating interface with live averages
+- 📂 Category browsing and featured highlights
+- 🔔 Auth prompt when anonymous users attempt to rate
+- 📱 Responsive Mantine UI design
 
 ### Admin
 - 🔐 Google OAuth via NextAuth.js with role checks (USER / ADMIN / SUPER_ADMIN)
 - 🗂️ CRUD for categories, items, ratings, and user roles
-- 📊 Dashboard analytics including rating charts and counts
+- 📊 Dashboard metrics with rating charts
 - 🔔 Toast feedback for all mutations
 
 ## Tech Stack
 
 - **Frontend:** Next.js 14, React 18, Mantine UI, @tanstack/react-query
-- **Backend:** tRPC, NextAuth.js
-- **Data Layer:** JSON flat file (`data/database.json`) accessed through a repository class
-- **Validation:** Zod environment and input schemas
+- **Backend:** tRPC, NextAuth.js, Zod validation
+- **Persistence (default):** JSON flat file repository
+- **Persistence (optional):** SQLite (`better-sqlite3`) accessed through Kysely
 - **Tooling:** TypeScript, ESLint, Docker / Docker Compose
 
 ## Getting Started
@@ -35,55 +35,64 @@ A full-stack ranking platform built with Next.js 14 (App Router), TypeScript, Ma
    ```bash
    cp .env.example .env.local
    ```
-   Update with your Google OAuth credentials and `NEXTAUTH_SECRET`.
+   Provide Google OAuth credentials and a secure `NEXTAUTH_SECRET`.
 
 3. Run the dev server  
    ```bash
    npm run dev
    ```
 
-4. Seed data lives in `data/database.json`. Promote your account to `SUPER_ADMIN` by editing the JSON after first sign-in if needed.
+4. Data lives in `data/database.json`. After first sign-in, promote your account to `SUPER_ADMIN` by editing the JSON or using the admin UI.
+
+### Optional SQLite + Kysely Backend
+
+- Install extra deps: `npm install better-sqlite3 kysely`
+- Enable the Kysely repository (`src/lib/database/sqlite.ts`) and ensure `data/app.db` is writable
+- Update imports where needed to swap from JSON repository to the Kysely client
 
 ### Docker
 
-- Development: `docker compose --profile dev up nextjs-ranking-app-dev`
-- Production preview: `docker compose up nextjs-ranking-app`
-- Data file is mounted from `./data`.
+- Development (hot reload, port 3001):  
+  `docker compose --profile dev up nextjs-ranking-app-dev`
+- Production preview (port 3000):  
+  `docker compose up nextjs-ranking-app`
+- Persistent storage is mounted from `./data`
 
 ## Project Structure
 
 ```
 src/
-├─ app/              # App Router pages (public + admin + auth)
+├─ app/              # App Router pages (public, admin, auth)
 ├─ components/       # Shared UI (AuthProvider, etc.)
-├─ lib/database/     # JSON repository implementation
-├─ server/           # tRPC routers and NextAuth setup
+├─ lib/database/     # JSON repository + optional Kysely client
+├─ server/           # tRPC routers and NextAuth config
 ├─ trpc/             # React query hooks
-└─ env.ts            # Zod env validation
+└─ env.ts            # Zod-based env validation
 ```
 
 ## Admin Workflow
 
-1. Visit `/auth/signin` (Google OAuth).
-2. Ensure your role is `ADMIN` or `SUPER_ADMIN`.
+1. Visit `/auth/signin` and authenticate with Google
+2. Ensure your role is `ADMIN` or `SUPER_ADMIN`
 3. Manage content at `/admin`:
-   - Categories & items CRUD
-   - Ratings moderation and stats
-   - User role adjustments
-   - Dashboard metrics and charts
+   - Categories and ranking items
+   - Ratings moderation and item stats
+   - User role updates
+   - Dashboard analytics
 
 ## Scripts
 
-- `npm run dev` – start dev server
+- `npm run dev` – start development server
 - `npm run build` – production build
+- `npm run start` – run compiled app
 - `npm run lint` – lint checks
 
 ## Notes
 
-- JSON storage is ideal for quick demos; migrate to SQLite/Kysely for production-ready persistence.
-- Maintain regular backups of `data/database.json`.
-- Configure `NEXTAUTH_URL` and secrets before deploying.
+- Keep regular backups of `data/database.json` (or `data/app.db` if using SQLite)
+- Configure `NEXTAUTH_URL` and secrets before deploying
+- Enable the Kysely layer for stronger querying and type safety when moving beyond JSON storage
 
 ## License
 
-MIT License. Contributions welcome via pull requests.
+MIT License. Contributions are welcome via pull requests.
