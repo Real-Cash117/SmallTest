@@ -5,7 +5,7 @@ import superjson from 'superjson';
 import { ZodError } from 'zod';
 import { getToken } from 'next-auth/jwt';
 import { getServerAuthSession } from '~/server/auth';
-import { JSONDatabase } from '~/lib/database';
+import { db } from '~/lib/database/sqlite';
 
 /**
  * 1. CONTEXT
@@ -32,14 +32,13 @@ interface CreateContextOptions {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
-    db: JSONDatabase.getInstance(),
+    db,
   };
 };
 
 const buildSessionFromToken = async (token: Awaited<ReturnType<typeof getToken>>): Promise<Session | null> => {
   if (!token?.email) return null;
 
-  const db = JSONDatabase.getInstance();
   const user = await db.findUserByEmail(token.email);
   if (!user) return null;
 
